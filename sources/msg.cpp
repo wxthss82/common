@@ -1084,8 +1084,22 @@ namespace Common {
 
 		if (text != _send_buffer)
 			delete[] text;
+        
+        char* textArray = strtok(text, "\r\n");
 
-		return _comm.put_packet(packet, false, callfromautosend);
+        bool succ = true;
+        while (textArray != NULL) {
+            int subLen = strlen(textArray) + 2;
+            char *newSubArray = new char[subLen];
+            std::strcpy(newSubArray, textArray);
+            std::strcat(newSubArray, "\r\n");
+            c_send_data_packet* subPacket = _comm.alloc_packet(subLen);
+            ::memcpy(&subPacket->data[0], newSubArray, subLen);
+            succ &= _comm.put_packet(subPacket, false, callfromautosend);
+            textArray = strtok(NULL, "\r\n");
+        }
+        
+		return succ;
 	}
 
 	void CComWnd::com_openclose()
