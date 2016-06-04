@@ -275,7 +275,7 @@ namespace Common{
 	_get_packet:
 		debug_out(("[写线程] 取数据包中...\n"));
 		c_send_data_packet* psdp = _send_data.get();
-        Sleep(100);
+        Sleep(50);
 		if (psdp->type == csdp_type::csdp_alloc || psdp->type == csdp_type::csdp_local){
 			debug_out(("[写线程] 取得一个发送数据包, 长度为 %d 字节\n", psdp->cb));
 
